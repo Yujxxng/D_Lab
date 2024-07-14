@@ -41,7 +41,7 @@ int Ellipse::getB() const
 
 int Ellipse::getCount()
 {
-	return count;
+	return Ellipse::count;
 }
 
 void Ellipse::print_details() const

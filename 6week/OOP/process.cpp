@@ -13,6 +13,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <algorithm>
 
 void parse_file(std::ifstream &ifs, std::vector<Shape*>& vs,
                 std::vector<Shape*>& ves, std::vector<Shape*>& vps) {
@@ -48,22 +49,45 @@ void parse_file(std::ifstream &ifs, std::vector<Shape*>& vs,
 void print_records(std::vector<Shape*> const& vs) {
   // TODO: Implement this method.
   // See function header in process.hpp for additional information
-	for(int i = 0; i < vs.size(); i++)
+	for (int i = 0; i < (int)vs.size(); i++)
 	{
-		std::cout << "Id = " << vs[i]->getId() << std::endl;
 		vs[i]->print_details();
+		std::cout << '\n';
 	}
 }
 
 void print_stats(std::vector<Shape*> const& vs) {
   // TODO: Implement this method.
   // See function header in process.hpp for additional information
-	int cnt = vs[0]->getCount();
-	double area = vs[0]->getArea();
+	
+	int cnt = Shape::getCount();
+	
+	if ((int)vs.size() == Ellipse::getCount())
+		cnt = Ellipse::getCount();
+	else if ((int)vs.size() == Polygon::getCount())
+		cnt = Polygon::getCount();
+	
+	double area = 0.0;
+	std::vector<std::pair <double, int>> tmp;
+
+	for (int i = 0; i < (int)vs.size(); i++)
+	{
+		tmp.push_back(std::make_pair(vs[i]->getArea(), i));
+		area += vs[i]->getArea();
+	}
+
+	area = area / vs.size();
+	std::sort(tmp.begin(), tmp.end());
 
 	std::cout << "Number of shapes = " << cnt << std::endl;
 	std::cout << "The mean of the areas = " << area << std::endl;
-	std::cout << "The sorted list of shapes (id,center,area) in ascending order of ares:"
+	std::cout << "The sorted list of shapes (id,center,area) in ascending order of areas:" << std::endl;
+	for (int i = 0; i < (int)vs.size(); i++)
+	{
+		int idx = tmp[i].second;
+		std::cout << vs[idx]->getId() << "," << vs[idx]->getCenter().x << "," << vs[idx]->getCenter().y <<
+			"," << vs[idx]->getArea() << std::endl;
+	}
 }
 
 /**
@@ -86,4 +110,10 @@ void cleanup(std::vector<Shape*>& vs, std::vector<Shape*>& ves, std::vector<Shap
   vs.clear();
   ves.clear();
   vps.clear();
+  
+  for (Shape *ps : ves)
+    delete ps;
+
+  for (Shape *ps : vps)
+    delete ps;
 }

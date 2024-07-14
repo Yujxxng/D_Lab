@@ -41,7 +41,7 @@ std::string Shape::getFill() const
 
 int Shape::getCount()
 {
-	return count;
+	return Shape::count;
 }
 
 void Shape::print_details() const

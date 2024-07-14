@@ -39,17 +39,12 @@ Polygon::~Polygon()
 
 std::vector<Point>& Polygon::getVertices()
 {
-	std::vector<Point> vp;
-
-	for (int i = 0; i < this->vertices.size(); i++)
-		vp.push_back(vertices[i]);
-
-	return vp;
+	return this->vertices;
 }
 
 int Polygon::getCount()
 {
-	return count;
+	return Polygon::count;
 }
 
 void Polygon::print_details() const
@@ -57,7 +52,7 @@ void Polygon::print_details() const
 	Shape::print_details();
 	std::cout << "Type = Polygon Shape" << std::endl;
 	std::cout << "Vertices = ";
-	for (int i = 0; i < this->vertices.size(); i++)
+	for (int i = 0; i < (int)vertices.size(); i++)
 		std::cout << vertices[i].x << "," << vertices[i].y << " ";
 	std::cout << '\n';
 }
@@ -65,7 +60,7 @@ void Polygon::print_details() const
 Point Polygon::getCenter() const
 {
 	int centerX = 0, centerY = 0;
-	for (int i = 0; i < this->vertices.size(); i++)
+	for (int i = 0; i < (int)vertices.size(); i++)
 	{
 		centerX += vertices[i].x;
 		centerY += vertices[i].y;
@@ -79,9 +74,27 @@ Point Polygon::getCenter() const
 
 double Polygon::getArea() const
 {
-	double area = 1234.0;
+	// fomular : 1/2 * (XiYi+1 - Xi+1Yi) 
+	double area = 0.0;
 
-	//not complete
+	for (int i = 0; i < (int)vertices.size(); i++)
+	{
+		int a, b = 0;
+		if (i == (int)((int)vertices.size() - 1))
+		{
+			a = vertices[i].x * vertices[0].y;
+			b = vertices[0].x * vertices[i].y;
+		}
+		else
+		{
+			a = vertices[i].x * vertices[i + 1].y;
+			b = vertices[i + 1].x * vertices[i].y;
+		}
+
+		area += (a - b);
+	}
+
+	area = area * 0.5;
 
 	return area;
 }
