@@ -13,7 +13,6 @@
 #include <string>
 #include "shape.hpp"
 
-#if 1
 #include "ellipse.hpp"
 #include "polygon.hpp"
 #include "process.hpp"
@@ -107,14 +106,3 @@ static void print_polygon(std::vector<Shape*> const& vps) {
   std::cout << "--------------------------------" << "\n";
   print_stats(vps);
 }
-#elif 0
-
-int main()
-{
-    std::string str = "E black white 89,65 31 45";
-
-    //Shape* p = new Shape(line);
-
-    return 0;
-}
-#endif
