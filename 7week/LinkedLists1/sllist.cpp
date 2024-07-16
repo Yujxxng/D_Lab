@@ -22,9 +22,7 @@ namespace hlp2 {
 	
 	sllist* construct()
 	{
-		//sllist* ptr = new sllist;
-		//ptr->head = nullptr;
-		return new sllist {nullptr};
+		return new sllist { nullptr };
 	}
 	
 	void destruct(sllist *ptr_sll)
@@ -92,7 +90,7 @@ namespace hlp2 {
 		node* tmp = ptr_sll->head;
 		while(tmp->next)
 		{
-			tmp = tmp->next;
+			tmp = next(tmp);
 		}
 		tmp->next = n;
 	}
@@ -105,7 +103,7 @@ namespace hlp2 {
 		p = ptr_sll->head;
 		q = ptr_sll->head;
 		
-		if(p->value == value)
+		if(data(p) == value)
 		{
 			ptr_sll->head = next(p);
 			delete q;
@@ -114,14 +112,14 @@ namespace hlp2 {
 		
 		while(q)
 		{
-			if(q->value == value)
+			if(data(q) == value)
 			{
 				p->next = next(q);
 				delete q;
 				return;
 			}
 			p = q;
-			q = q->next;
+			q = next(q);
 		}
 	}
 	void insert(sllist *ptr_sll, int value, size_t index)
@@ -151,14 +149,14 @@ namespace hlp2 {
 		{
 			if( i == index )
 			{
-				tmp->next = p->next;
+				tmp->next = next(p);
 				p->next = tmp;
 				return;
 			}
 			
 			i++;
 			p = q;
-			q = q->next;
+			q = next(q);
 		}
 	}
 	
@@ -188,10 +186,10 @@ namespace hlp2 {
 		
 		while(p)
 		{
-			if(p->value == value)
+			if(data(p) == value)
 				return p;
 			
-			p = p->next;
+			p = next(p);
 		}
 		
 		return nullptr;
