@@ -23,14 +23,14 @@ namespace hlp2 {
 	public:
 		static size_type object_count();
 		ListInt();
-		ListInt(const ListInt& other) : head(other.head), tail(other.tail), counter(other.counter) {}
-		ListInt(std::initializer_list<value_type> l);
+		ListInt(const ListInt& other);
+		ListInt(const std::initializer_list<value_type> l);
 		~ListInt();
 
-		ListInt& operator=(ListInt& other);
-		ListInt& operator=(std::initializer_list<value_type> l);
+		ListInt& operator=(const ListInt& other);
+		ListInt& operator=(const std::initializer_list<value_type> l);
 		ListInt& operator+=(const ListInt& other);
-		ListInt& operator+=(std::initializer_list<value_type> l);
+		ListInt& operator+=(const std::initializer_list<value_type> l);
 
 		reference operator[](const value_type pos);
 		const_reference operator[](const value_type pos) const;

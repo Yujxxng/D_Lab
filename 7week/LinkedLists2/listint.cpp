@@ -47,7 +47,29 @@ hlp2::ListInt::ListInt()
 	object_counter++;
 }
 
-hlp2::ListInt::ListInt(std::initializer_list<value_type> l)
+hlp2::ListInt::ListInt(const ListInt& other)
+{
+	object_counter++;
+	this->counter = other.counter;
+
+	if (other.head == nullptr)
+	{
+		return;
+	}
+
+	Node* node = other.head;
+	value_type v = node->data;
+
+	while(node)
+	{
+		v = node->data;
+		push_back(v);
+		
+		node = node->next;
+	}
+}
+
+hlp2::ListInt::ListInt(const std::initializer_list<value_type> l)
 {
 	object_counter++;
 	std::initializer_list<value_type>::iterator it;
@@ -60,8 +82,58 @@ hlp2::ListInt::ListInt(std::initializer_list<value_type> l)
 hlp2::ListInt::~ListInt()
 {
 	//delete
-	clear();
 	object_counter--;
+	clear();
+}
+
+hlp2::ListInt& hlp2::ListInt::operator=(const ListInt& other)
+{
+	if (!this->empty())
+		this->clear();
+
+	if (other.head == nullptr)
+	{
+		return *this;
+	}
+
+	Node* node = other.head;
+	value_type v = node->data;
+
+	while (node)
+	{
+		v = node->data;
+		push_back(v);
+
+		node = node->next;
+	}
+
+	return *this;
+}
+
+hlp2::ListInt& hlp2::ListInt::operator=(const std::initializer_list<value_type> l)
+{
+	if (!this->empty())
+		this->clear();
+
+	std::initializer_list<value_type>::iterator it;
+	for (it = l.begin(); it != l.end(); it++)
+	{
+		push_back(*it);
+	}
+
+	return *this;
+}
+
+hlp2::ListInt& hlp2::ListInt::operator+=(const ListInt& other)
+{
+
+	return *this;
+}
+
+hlp2::ListInt& hlp2::ListInt::operator+=(const std::initializer_list<value_type> l)
+{
+
+	return *this;
 }
 
 void hlp2::ListInt::push_front(value_type value)
@@ -69,7 +141,7 @@ void hlp2::ListInt::push_front(value_type value)
 	counter++;
 	Node* node = new_node(value);
 
-	if (this->head == nullptr)
+	if (empty())
 	{
 		this->head = node;
 		this->tail = node;
@@ -86,27 +158,36 @@ void hlp2::ListInt::push_back(value_type value)
 	counter++;
 	Node* node = new_node(value);
 
-	if (this->head == nullptr)
+	if (empty())
 	{
 		this->head = node;
 		this->tail = node;
 	}
 	else
 	{
+		tail->next = node;
 		this->tail = node;
 	}
 }
 
 hlp2::ListInt::value_type hlp2::ListInt::pop_front()
 {
-	return this->head->data;
+	value_type val = this->head->data;
+
+	Node* tmp = this->head;
+	this->head = tmp->next;
+	delete tmp;
+
+	return val;
 }
 
 void hlp2::ListInt::clear()
 {
-	Node* p, * q;
+	if (empty()) return;
+
+	Node *p, *q;
 	p = this->head;
-	q = this->head;
+	q = p;
 
 	while (q)
 	{
@@ -116,6 +197,9 @@ void hlp2::ListInt::clear()
 
 		p = q;
 	}
+
+	this->head = nullptr;
+	this->tail = nullptr;
 }
 
 void hlp2::ListInt::swap(ListInt& other)
