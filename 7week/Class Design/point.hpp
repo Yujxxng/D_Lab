@@ -22,10 +22,10 @@ public:
 	Point& operator+=(const Point& other);
 
 	Point& operator++();
-	Point operator++(int);
+	const Point operator++(int);
 
 	Point& operator--();
-	Point operator--(int);
+	const Point operator--(int);
 
 private:
 	double x; // The x-coordinate of a Point

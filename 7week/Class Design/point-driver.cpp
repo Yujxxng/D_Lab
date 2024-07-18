@@ -313,7 +313,7 @@ void IncDecTest() {
 
   // These should fail to compile - if they compile, your code is wrong.
   //hlp2::Point pt21 = ++(pt7--); 
-  //hlp2::Point pt22 = --(pt7++); 
+  //hlp2::Point pt22 = --(pt7++);
   //hlp2::Point pt11 = ++( pt7 % 45.0 );
   //hlp2::Point pt12 = ++( pt7 ^ pt8 );
   //hlp2::Point pt13 = ++( pt7 - 5.0 );

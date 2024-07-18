@@ -54,7 +54,7 @@ namespace hlp2 {
 		return *this;
 	}
 
-	Point Point::operator++(int)
+	const Point Point::operator++(int)
 	{
 		Point tmp;
 		tmp[0] = (*this)[0];
@@ -74,7 +74,7 @@ namespace hlp2 {
 		return *this;
 	}
 
-	Point Point::operator--(int)
+	const Point Point::operator--(int)
 	{
 		Point tmp;
 		tmp[0] = (*this)[0];
