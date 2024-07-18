@@ -1,13 +1,5 @@
-// File header documentation is required!!!
+#include "listint.hpp"
 
-// Other than listint.hpp, you really don't have to include any other files except when testing your code.
-// When you're ready to submit, don't include either of the following two headers: <forward_list> and <list>
-#include "listInt.hpp"
-// Private functions must be declared and defined in an anonymous namespace!!!
-
-namespace {
-
-}
 // This function definition is provided:
 ////////////////////////////////////////////////////////////////////////////////
 // Function: operator<<
@@ -16,7 +8,6 @@ namespace {
 //           list - the List to output
 //  Outputs: Returns an ostream object.
 ////////////////////////////////////////////////////////////////////////////////
-
 
 namespace hlp2
 {
@@ -35,20 +26,24 @@ namespace hlp2
 	}
 }
 
+//Declare the Static value
 hlp2::ListInt::size_type hlp2::ListInt::object_counter{ 0 };
 
 hlp2::ListInt::size_type hlp2::ListInt::object_count()
 {
+	//return object_counter
 	return object_counter;
 }
 
 hlp2::ListInt::ListInt()
 {
+	//default constructor
 	object_counter++;
 }
 
 hlp2::ListInt::ListInt(const ListInt& other)
 {
+	//
 	object_counter++;
 	this->counter = other.counter;
 
@@ -88,6 +83,7 @@ hlp2::ListInt::~ListInt()
 
 hlp2::ListInt& hlp2::ListInt::operator=(const ListInt& other)
 {
+#if 0
 	if (!this->empty())
 		this->clear();
 
@@ -108,10 +104,19 @@ hlp2::ListInt& hlp2::ListInt::operator=(const ListInt& other)
 	}
 
 	return *this;
+#elif 1 //copy-and-swap
+	hlp2::ListInt b = other;
+
+	this->swap(b);
+
+	return *this;
+
+#endif
 }
 
 hlp2::ListInt& hlp2::ListInt::operator=(const std::initializer_list<value_type> l)
 {
+#if 0
 	if (!this->empty())
 		this->clear();
 
@@ -121,19 +126,96 @@ hlp2::ListInt& hlp2::ListInt::operator=(const std::initializer_list<value_type> 
 		push_back(*it);
 	}
 
+#elif 1
+	hlp2::ListInt b = l;
+
+	this->swap(b);
+
 	return *this;
+#endif
 }
 
 hlp2::ListInt& hlp2::ListInt::operator+=(const ListInt& other)
 {
+#if 0
+	if (other.head == nullptr)
+	{
+		return *this;
+	}
+
+	Node* node = other.head;
+	value_type v = node->data;
+
+	while (node)
+	{
+		v = node->data;
+		push_back(v);
+
+		node = node->next;
+	}
 
 	return *this;
+#elif 1
+	hlp2::ListInt b = other;
+
+	this->tail->next = b.head;
+	this->tail = b.tail;
+	this->counter += b.counter;
+
+	b.head = nullptr;
+	b.tail = nullptr;
+
+	return *this;
+#endif
 }
 
 hlp2::ListInt& hlp2::ListInt::operator+=(const std::initializer_list<value_type> l)
 {
+#if 0
+	std::initializer_list<value_type>::iterator it;
+	for (it = l.begin(); it != l.end(); it++)
+	{
+		push_back(*it);
+	}
+	return *this;
+#elif 1
+	hlp2::ListInt b = l;
+
+	this->tail->next = b.head;
+	this->tail = b.tail;
+	this->counter += b.counter;
+
+	b.head = nullptr;
+	b.tail = nullptr;
 
 	return *this;
+#endif
+}
+
+hlp2::ListInt::reference hlp2::ListInt::operator[](const int pos)
+{
+	int i = 0;
+	Node* p = this->head;
+	while (i != pos)
+	{
+		p = p->next;
+		i++;
+	}
+
+	return p->data;
+}
+
+hlp2::ListInt::const_reference hlp2::ListInt::operator[](const int pos) const
+{
+	int i = 0;
+	Node* p = this->head;
+	while (i != pos)
+	{
+		p = p->next;
+		i++;
+	}
+
+	return p->data;
 }
 
 void hlp2::ListInt::push_front(value_type value)
@@ -204,15 +286,20 @@ void hlp2::ListInt::clear()
 
 void hlp2::ListInt::swap(ListInt& other)
 {
-	Node* th, * tt;
+	Node *th, *tt;
+	size_type s;
+
 	th = other.head;
 	tt = other.tail;
+	s = other.counter;
 
 	other.head = this->head;
 	other.tail = this->tail;
+	other.counter = this->counter;
 
 	this->head = th;
 	this->tail = tt;
+	this->counter = s;
 }
 
 hlp2::ListInt::size_type hlp2::ListInt::size()
@@ -244,4 +331,32 @@ hlp2::ListInt::Node* hlp2::ListInt::new_node(value_type data) const
 	node->next = nullptr;
 
 	return node;
+}
+
+hlp2::ListInt hlp2::operator+(const hlp2::ListInt& A, const hlp2::ListInt& B)
+{
+
+	hlp2::ListInt tmp;
+	tmp = A;
+	tmp += B;
+
+	return tmp;
+}
+hlp2::ListInt hlp2::operator+(const hlp2::ListInt& A, const std::initializer_list<int> l)
+{
+	hlp2::ListInt tmp;
+	
+	tmp = A;
+	tmp += l;
+
+	return tmp;
+}
+hlp2::ListInt hlp2::operator+(const std::initializer_list<int> l, const hlp2::ListInt& A)
+{
+	hlp2::ListInt tmp;
+
+	tmp = l;
+	tmp += A;
+
+	return tmp;
 }

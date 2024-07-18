@@ -1,15 +1,8 @@
-// File header documentation is required!!!
-
-// Provide include guards
-// Don't include either of the following two headers: <forward_list> and <list>
-// You may need to include <cstddef> for size_t [which is the largest unsigned type from the C standard library]
 #include <cstddef>
 #include <iostream>
 #include <initializer_list>
 #include <iomanip>
-// All names from here on must be in namespace hlp2.
-// Don't add any names that are private to the implementation source file listint.cpp in this file.
-// Necessary declarations are described in the spec.
+
 namespace hlp2 {
 	class ListInt {
 	public: //type aliases
@@ -32,8 +25,8 @@ namespace hlp2 {
 		ListInt& operator+=(const ListInt& other);
 		ListInt& operator+=(const std::initializer_list<value_type> l);
 
-		reference operator[](const value_type pos);
-		const_reference operator[](const value_type pos) const;
+		reference operator[](const int pos);
+		const_reference operator[](const int pos) const;
 
 		void push_front(value_type val);
 		void push_back(value_type val);
@@ -59,13 +52,9 @@ namespace hlp2 {
 		Node* new_node(value_type data) const;
 	};
 
-	ListInt& operator+(const ListInt& A, const ListInt& B);
-	ListInt& operator+(const ListInt& A, std::initializer_list<int> l);
-	ListInt& operator+(std::initializer_list<int> l, ListInt& A);
+	ListInt operator+(const ListInt& A, const ListInt& B);
+	ListInt operator+(const ListInt& A, const std::initializer_list<int> l);
+	ListInt operator+(const std::initializer_list<int> l, const ListInt& A);
 
 	std::ostream& operator<<(std::ostream& os, const ListInt& rhs);
 }
-
-// Ensure every member function declared in class ListInt has a header!!!
-
-// Declare this as a friend function in class ListInt:
