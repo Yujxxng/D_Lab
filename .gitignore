@@ -9,3 +9,6 @@
 !*.h
 !*.hpp
 !*.c
+
+# Ignore files with "driver" in their name
+*driver*
