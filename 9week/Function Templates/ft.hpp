@@ -5,24 +5,7 @@
 #include <iostream>
 
 namespace hlp2 {
-// DECLARE (not define!!!) and DOCUMENT in ALPHABETIC ORDER the function
-// templates you'll be defining. There are *13* function templates to be
-// declared and defined.
-  
-// I'm providing the declaration and documentation for swap here:
-/***************************************************************************/
-/*!
-\brief
- Swaps two objects. There is no return value but the two objects are
- swapped in place.
 
-\param lhs
-  Reference to the first object to swap.
-
-\param rhs
- Reference to the second object to swap.
-*/
-/**************************************************************************/
 template <typename T> void swap(T &lhs, T &rhs);
 template <typename T> void display(const T* a, const T* b);
 template <typename T> void swap_ranges(T* a, T* b, T* c);
@@ -37,7 +20,6 @@ template <typename T> T* max_element(T* start, T* end);
 template <typename T1, typename T2> bool equal(T1* start1, T1* end, T2* start2);
 template <typename T> T sum(T* start, T* end);
 
-// Provide DEFINITIONS for each function template declared above ...
 template <typename T> void swap(T& lhs, T& rhs)
 {
 	T tmp = lhs;
@@ -70,16 +52,30 @@ template <typename T> void swap_ranges(T* a, T* b, T* c)
 }
 template <typename T> T* remove(T* start, T* end, const T& n)
 {
-	start = std::find(start, end, n);
-	if (start != end)
+	bool flag = true;
+	while (true)
 	{
-		for (auto it = start; it != end; it++)
+		for (auto it = start; it < end - 1; it++)
 		{
-			if (!(*it == n))
-				*start++ = std::move(*it);
+			if (*it == n)
+			{
+				swap(*it, *(it + 1));
+				flag = false;
+			}
 		}
+
+		if (flag)
+			break;
+		else
+			flag = true;
+
+		end--;
 	}
-	return start;
+
+	if (*(end - 1) == n)
+		end--;
+
+	return end;
 }
 template <typename T1, typename T2> int count(T1* start, T1* end, const T2& n)
 {
@@ -94,9 +90,6 @@ template <typename T1, typename T2> int count(T1* start, T1* end, const T2& n)
 }
 template <typename T1, typename T2> T1* find(T1* start, T1* end, const T2& value)
 {
-	std::cout << typeid(start).name() << std::endl;
-	std::cout << typeid(end).name() << std::endl;
-	std::cout << typeid(value).name() << std::endl;
 	for (; start != end; ++start)
 	{
 		if (*start == value)
@@ -180,4 +173,3 @@ template <typename T> T sum(T* start, T* end)
 }
 
 #endif
-//-------------------------------------------------------------------------
