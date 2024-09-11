@@ -18,9 +18,27 @@ Node::~Node()
 
 void Node::PrintNode(int n, std::vector<bool>ids)
 {
-
+	for (int i = 0; i < n; i++)
+	{
+		if (ids[i])
+			std::cout << " |";
+		else
+			std::cout << "  ";
+	}
 	std::cout << " +-[ " << this->First() << " , " << this->Second().GetInt() << " ]" << n << std::endl;
-	std::cout << "  ";
+
+	if (this->Left)
+	{
+		(this->Right != nullptr) ? ids.push_back(true) : ids.push_back(false);
+		this->Left->PrintNode(n + 1, ids);
+		ids.pop_back();
+	}
+	if (this->Right)
+	{
+		ids.push_back(false);
+		this->Right->PrintNode(n + 1, ids);
+		ids.pop_back();
+	}
 }
 
 int Node::CalculateLenght()
@@ -41,7 +59,7 @@ int Node::CalculateLenght()
 
 void Node::Insert(int k, DATA d)
 {
-	if (d.GetInt() < this->data.GetInt())
+	if (k < this->Key)
 	{
 		if (Left != nullptr)
 			Left->Insert(k, d);
@@ -52,7 +70,7 @@ void Node::Insert(int k, DATA d)
 		}
 	}
 
-	else //(d.GetInt() >= this->data.GetInt())
+	else
 	{
 		if (Right != nullptr)
 			Right->Insert(k, d);

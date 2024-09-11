@@ -9,67 +9,106 @@ void Tree::Remove(int key)
 		return;
 
 	Node* tmp = Find(key);
-	delete tmp;
+	if (tmp == nullptr)
+		return;
+
+	Node* CurNode = root;
+	Node* PreNode = nullptr;
+	Node* PreTmp = nullptr;
+
+	//Find
+	while (CurNode->Key != key)
+	{
+		if (CurNode->Key > key)
+		{
+			PreNode = CurNode;
+			CurNode = CurNode->Left;
+		}
+		else
+		{
+			PreNode = CurNode;
+			CurNode = CurNode->Right;
+		}
+	}
+	if (CurNode->Left == nullptr && CurNode->Right == nullptr)
+	{
+		if (PreNode->Left == CurNode)
+			PreNode->Left = nullptr;
+		else if (PreNode->Right == CurNode)
+			PreNode->Right = nullptr;
+
+		delete CurNode;
+	}
+	else
+	{
+		if (CurNode->Left == nullptr)
+		{
+			PreTmp = CurNode;
+			tmp = CurNode->Right;
+		}
+		else if (CurNode->Right == nullptr)
+		{
+			PreTmp = CurNode;
+			tmp = CurNode->Left;
+		}
+		else
+		{
+			tmp = CurNode->Right;
+			PreTmp = CurNode;
+			while (tmp->Left != nullptr)
+			{
+				PreTmp = tmp;
+				tmp = tmp->Left;
+			}
+		}
+		if (CurNode == root)
+			root = tmp;
+		else
+		{
+			if (PreTmp->Left == tmp)
+				PreTmp->Left = nullptr;
+			else if (PreTmp->Right == tmp)
+				PreTmp->Right = nullptr;
+
+			tmp->Left = CurNode->Left;
+			tmp->Right = CurNode->Right;
+
+			if (PreNode->Left == CurNode)
+				PreNode->Left = tmp;
+			else if (PreNode->Right == CurNode)
+				PreNode->Right = tmp;
+		}
+
+		delete CurNode;
+	}
 }
 
 void Tree::Print()
 {
+	std::cout << "Tree Length = " << this->Length() << std::endl;
 	if (root == nullptr)
 	{
-		std::cout << "Empty Tree!" << std::endl;
 		return;
 	}
 
 	int n = 0;
-	int depth = 0;
 	std::vector<bool> ids;
+	Node* tmp = root;
 
-	std::stack<Node*> s;
-	s.push(root);
 	ids.push_back(false);
-
-	while (!s.empty())
-	{
-		Node* tmp = s.top();
-		tmp->PrintNode(n, ids);
-		s.pop();
-		
-		if (tmp->Left && tmp->Right)
-			ids.push_back(true);
-		else
-			ids.push_back(false);
-
-		if (tmp->Right != nullptr)
-		{
-			s.push(tmp->Right);
-			n++;
-		}
-
-		if (tmp->Left != nullptr)
-		{
-			s.push(tmp->Left);
-			n++;
-		}
-		//n++;
-
-
-	}
+	tmp->PrintNode(n, ids);
 }
+
 
 Tree::Tree(const std::vector<std::pair<int, int>>& Nodes)
 {
-	int n = Nodes.size();
-	int i = 0;
-
-	while (i < n)
-	{
+	for (int i = 0; i < (int)Nodes.size(); i++)
 		Insert(Nodes[i].first, Nodes[i].second);
-		i++;
-	}
 }
 
 Tree::~Tree()
 {
+	Clear();
 }
 
 void Tree::Insert(int key, DATA data)
@@ -111,6 +150,7 @@ Node* Tree::Root()
 
 int Tree::Length()
 {
+	if (root == nullptr) return 0;
 	return root->CalculateLenght();
 }
 
