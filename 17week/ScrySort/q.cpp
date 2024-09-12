@@ -5,24 +5,32 @@
 //TODO:
 void Scry2Sort(const std::vector<int>& target, deck& obj)
 {
-	int size = target.size();
-	int flag = target[0];
-	while (flag != obj.Top())
-	{
-		for (int i = 0; i < size; i++)
-		{
-			while (target[i] != obj.Top())
-			{
-				if (target[i] == obj.Other())
-					obj.Swap();
-				else
-					obj.Pushback();
-			}
+	int total = (int)target.size();
+	int cnt = 0;
 
-			if (target[i] == obj.Top())
-				obj.Pushback();
+	while (obj.Top() != target[0]) //Track the target[0] value
+		obj.Pushback();
+
+	for (int i = 1; i < (int)target.size(); i++)
+	{
+		while (obj.Top() != target[i])
+		{
+			obj.Pushback();
+			cnt++;
 		}
+
+		for (int j = 0; j < (total - cnt); j++)
+		{
+			obj.Swap();
+			obj.Pushback();
+		}
+
+		cnt = 0;
+		//std::cout << i << " : ";
+		//obj.Print();
+		//std::cout << "\n";
 	}
+	obj.Pushback();
 }
 
 
