@@ -24,9 +24,10 @@ int main()
 	for (int i = 0; i < 10; i++)
 		v.push_back({ temp[i], 1 });
 
-	Tree b(v);
-	b.Print();
-
+	Tree* b = new Tree(v);
+	b->Print();
+	b->Remove(8);
+	b->Print();
 
 	return 0;
 }

@@ -8,79 +8,54 @@ void Tree::Remove(int key)
 	if (root == nullptr)
 		return;
 
-	Node* tmp = Find(key);
-	if (tmp == nullptr)
+	Node* node = Find(key);
+	if (node == nullptr)
 		return;
 
-	Node* CurNode = root;
-	Node* PreNode = nullptr;
-	Node* PreTmp = nullptr;
-
-	//Find
-	while (CurNode->Key != key)
+	Node* preNode = nullptr;
+	node = root;
+	while (node->Key != key)
 	{
-		if (CurNode->Key > key)
+		if (node->Key > key)
 		{
-			PreNode = CurNode;
-			CurNode = CurNode->Left;
+			preNode = node;
+			node = node->Left;
 		}
 		else
 		{
-			PreNode = CurNode;
-			CurNode = CurNode->Right;
+			preNode = node;
+			node = node->Right;
 		}
 	}
-	if (CurNode->Left == nullptr && CurNode->Right == nullptr)
+	if (preNode == nullptr)
+		root = nullptr;
+	else if (preNode->Left == node)
+		preNode->Left = nullptr;
+	else if (preNode->Right == node)
+		preNode->Right = nullptr;
+
+	std::vector<std::pair<int, int>> child;
+	std::stack<Node*> s;
+	s.push(node);
+	while (!s.empty())
 	{
-		if (PreNode->Left == CurNode)
-			PreNode->Left = nullptr;
-		else if (PreNode->Right == CurNode)
-			PreNode->Right = nullptr;
+		Node* tmp = s.top();
+		s.pop();
 
-		delete CurNode;
+		if (tmp != node)
+			child.push_back(std::make_pair(tmp->First(), tmp->Second().GetInt()));
+	
+		if (tmp->Right != nullptr)
+			s.push(tmp->Right);
+
+		if (tmp->Left != nullptr)
+			s.push(tmp->Left);
+
+		delete tmp;
 	}
-	else
-	{
-		if (CurNode->Left == nullptr)
-		{
-			PreTmp = CurNode;
-			tmp = CurNode->Right;
-		}
-		else if (CurNode->Right == nullptr)
-		{
-			PreTmp = CurNode;
-			tmp = CurNode->Left;
-		}
-		else
-		{
-			tmp = CurNode->Right;
-			PreTmp = CurNode;
-			while (tmp->Left != nullptr)
-			{
-				PreTmp = tmp;
-				tmp = tmp->Left;
-			}
-		}
-		if (CurNode == root)
-			root = tmp;
-		else
-		{
-			if (PreTmp->Left == tmp)
-				PreTmp->Left = nullptr;
-			else if (PreTmp->Right == tmp)
-				PreTmp->Right = nullptr;
 
-			tmp->Left = CurNode->Left;
-			tmp->Right = CurNode->Right;
-
-			if (PreNode->Left == CurNode)
-				PreNode->Left = tmp;
-			else if (PreNode->Right == CurNode)
-				PreNode->Right = tmp;
-		}
-
-		delete CurNode;
-	}
+	for (int i = 0; i < (int)child.size(); i++)
+		Insert(child[i].first, child[i].second);
 }
 
 void Tree::Print()
@@ -100,7 +75,7 @@ void Tree::Print()
 }
 
 
-Tree::Tree(const std::vector<std::pair<int, int>>& Nodes)
+Tree::Tree(const std::vector<std::pair<int, int>>& Nodes) : root(nullptr)
 {
 	for (int i = 0; i < (int)Nodes.size(); i++)
 		Insert(Nodes[i].first, Nodes[i].second);

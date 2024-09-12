@@ -53,8 +53,6 @@ int Node::CalculateLenght()
 
 	if (l > r) return l + 1;
 	else return r + 1;
-
-
 }
 
 void Node::Insert(int k, DATA d)
